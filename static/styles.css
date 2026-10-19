@@ -1,0 +1,74 @@
+/* FixGuide AI Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+#app { max-width: 800px; margin: 0 auto; padding: 20px; }
+.screen { display: none; }
+.screen.active { display: block; }
+.logo { text-align: center; margin-bottom: 40px; }
+.logo-icon { font-size: 64px; }
+.logo h1 { font-size: 36px; margin: 10px 0; color: #38bdf8; }
+.subtitle { color: #94a3b8; font-size: 18px; }
+.card { background: #1e293b; border-radius: 16px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; }
+select, input, textarea { width: 100%; padding: 12px; background: #334155; border: 1px solid #475569; border-radius: 8px; color: #e2e8f0; font-size: 16px; }
+textarea { min-height: 80px; resize: vertical; }
+select:focus, input:focus, textarea:focus { outline: none; border-color: #38bdf8; }
+.btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: #0ea5e9; color: white; }
+.btn-primary:hover { background: #0284c7; }
+.btn-secondary { background: #475569; color: white; margin-bottom: 20px; }
+.btn-outline { background: transparent; border: 2px solid #475569; color: #e2e8f0; }
+.btn-outline:hover { border-color: #38bdf8; }
+.hidden { display: none !important; }
+.repair-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+.progress-bar { flex: 1; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: #0ea5e9; transition: width 0.3s; }
+.step-counter { color: #94a3b8; font-weight: 600; }
+.device-badge { background: #0369a1; color: #e0f2fe; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
+.user-notes-group textarea { min-height: 70px; font-size: 14px; }
+.step-card { background: #1e293b; border-radius: 16px; padding: 30px; margin-bottom: 20px; display: flex; gap: 20px; }
+.step-number { width: 60px; height: 60px; border-radius: 50%; background: #0ea5e9; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; flex-shrink: 0; }
+.step-content h3 { font-size: 20px; margin-bottom: 15px; line-height: 1.5; }
+.step-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+.tools-list, .safety-warnings { display: flex; flex-wrap: wrap; gap: 8px; }
+.tools-list span, .safety-warnings span { background: #334155; padding: 6px 12px; border-radius: 20px; font-size: 14px; }
+.safety-warnings span { background: #78350f; color: #fbbf24; }
+.verification-card { background: #1e293b; border-radius: 16px; padding: 30px; text-align: center; }
+.verification-card h4 { margin-bottom: 10px; }
+.hint { color: #94a3b8; margin-bottom: 20px; }
+.photo-preview { max-width: 100%; border-radius: 8px; margin: 15px 0; }
+.verification-result { margin-top: 15px; padding: 12px; border-radius: 8px; }
+.verification-result.success { background: #064e3b; color: #34d399; }
+.verification-result.error { background: #7f1d1d; color: #f87171; }
+.complete-card { text-align: center; padding: 50px 30px; }
+.complete-icon { font-size: 72px; margin-bottom: 20px; }
+.checklist { list-style: none; margin: 20px 0; text-align: left; }
+.checklist li { padding: 10px 0; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px; }
+.checklist li::before { content: '☐'; color: #38bdf8; font-size: 20px; }
+.loading { text-align: center; padding: 40px; }
+.spinner { border: 4px solid #334155; border-top: 4px solid #0ea5e9; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error { background: #7f1d1d; color: #f87171; padding: 12px; border-radius: 8px; margin-top: 15px; }
+.btn-full { width: 100%; border-style: dashed; padding: 14px; font-size: 15px; }
+.btn-full:hover { background: #334155; }
+.identify-box { margin-bottom: 25px; }
+.identify-status { display: flex; align-items: center; gap: 15px; background: #0f172a; border: 1px solid #0284c7; border-radius: 10px; padding: 12px 15px; margin-top: 10px; }
+.identify-thumb { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; border: 1px solid #475569; }
+.identify-info { flex: 1; text-align: left; }
+.identify-title { font-weight: 600; color: #38bdf8; font-size: 15px; margin-bottom: 3px; }
+.identify-sub { font-size: 13px; color: #94a3b8; }
+.ref-image-container { margin: 18px 0; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 15px; text-align: left; }
+.ref-badge { display: inline-flex; align-items: center; gap: 6px; background: #0284c7; color: white; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.step-ref-img { width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; background: #020617; display: block; }
+.qa-card { margin-bottom: 20px; border-left: 4px solid #38bdf8; text-align: left; }
+.qa-header { margin-bottom: 12px; }
+.qa-header h4 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
+.qa-subtitle { font-size: 13px; color: #94a3b8; display: block; }
+.qa-form { display: flex; gap: 10px; margin-top: 10px; }
+.qa-form input { flex: 1; padding: 10px 14px; font-size: 14px; }
+.qa-form .btn { margin-bottom: 0; white-space: nowrap; font-size: 14px; padding: 10px 16px; }
+.qa-messages { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; margin-bottom: 12px; padding: 10px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
+.qa-msg { padding: 10px 14px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
+.qa-msg-user { background: #1e3a8a; color: #bfdbfe; align-self: flex-end; max-width: 80%; }
+.qa-msg-bot { background: #334155; color: #f1f5f9; align-self: flex-start; max-width: 90%; border-left: 3px solid #38bdf8; }

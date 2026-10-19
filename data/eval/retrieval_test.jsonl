@@ -1,0 +1,8 @@
+{"query": "game controller stick drift", "category": "game_controller", "relevant_chunk_ids": ["7126a1dd-a52e-5b51-bc10-182887bf1389", "41cd1ae6-9dde-5f1d-b84d-5ea656488465", "568bf816-96f1-5762-96d2-2dbb6ee72e5b", "6d75531b-e6b8-5cad-bb45-939c09ffeef5", "cb5057f5-3aec-5997-982f-e3196438b80e"]}
+{"query": "joystick drift fix", "category": "game_controller", "relevant_chunk_ids": ["7126a1dd-a52e-5b51-bc10-182887bf1389", "41cd1ae6-9dde-5f1d-b84d-5ea656488465"]}
+{"query": "headphones one side silent", "category": "wired_headphones", "relevant_chunk_ids": ["6535b117-7b96-5acb-9d74-4387772e21e6", "c65795c4-f72b-5b1e-9a81-812b6ecad764", "a6317bba-54d1-5338-b68b-12463c750581", "d2e6a5a4-81b1-599d-b97c-5ab3905bbe81", "bd176c83-cd44-548a-9a04-88c8b708bbbd"]}
+{"query": "broken headphone cable", "category": "wired_headphones", "relevant_chunk_ids": ["6535b117-7b96-5acb-9d74-4387772e21e6", "a6317bba-54d1-5338-b68b-12463c750581"]}
+{"query": "lamp wont turn on", "category": "lamp", "relevant_chunk_ids": ["20ac529a-be96-5298-8647-b44767554114", "0576e45b-db2c-5d65-9527-546c77f52a7e", "baa2b6de-8624-5125-8145-af82ca7c15d2", "ed0a58c8-9bf5-5947-8f6f-01e1e1146fe2"]}
+{"query": "lamp switch faulty", "category": "lamp", "relevant_chunk_ids": ["20ac529a-be96-5298-8647-b44767554114", "ed0a58c8-9bf5-5947-8f6f-01e1e1146fe2"]}
+{"query": "controller shell opening", "category": "game_controller", "relevant_chunk_ids": ["7126a1dd-a52e-5b51-bc10-182887bf1389", "41cd1ae6-9dde-5f1d-b84d-5ea656488465"]}
+{"query": "solder joint repair", "category": "wired_headphones", "relevant_chunk_ids": ["6535b117-7b96-5acb-9d74-4387772e21e6", "d2e6a5a4-81b1-599d-b97c-5ab3905bbe81"]}
