@@ -1,0 +1,135 @@
+categories:
+  - id: "game_controller"
+    name: "Game Controller"
+    risk_level: "safe"
+    typical_tools:
+      - "Phillips #00 screwdriver"
+      - "Tri-point Y00 screwdriver"
+      - "Plastic opening tool"
+      - "Tweezers"
+    common_issues:
+      - "stick drift"
+      - "button not registering"
+      - "trigger stuck"
+      - "charging port loose"
+    components:
+      - "screws"
+      - "ribbon_cables"
+      - "joystick_module"
+      - "buttons"
+      - "battery"
+      - "mainboard"
+
+  - id: "wired_headphones"
+    name: "Wired Headphones"
+    risk_level: "safe"
+    typical_tools:
+      - "Phillips #00 screwdriver"
+      - "Soldering iron"
+      - "Wire strippers"
+      - "Multimeter"
+    common_issues:
+      - "one_side_silent"
+      - "intermittent_audio"
+      - "cable_frayed"
+      - "jack_bent"
+    components:
+      - "screws"
+      - "drivers"
+      - "wires"
+      - "solder_points"
+      - "jack_connector"
+      - "earpads"
+
+  - id: "lamp"
+    name: "Table Lamp"
+    risk_level: "caution"
+    typical_tools:
+      - "Phillips #1 screwdriver"
+      - "Flathead screwdriver"
+      - "Wire strippers"
+      - "Electrical tape"
+    common_issues:
+      - "wont_turn_on"
+      - "flickering"
+      - "switch_stuck"
+      - "cord_damaged"
+    components:
+      - "screws"
+      - "switch"
+      - "socket"
+      - "cord"
+      - "plug"
+      - "harness"
+    safety_notes:
+      - "Unplug before disassembly"
+      - "Check for damaged insulation"
+      - "Verify polarity on reassembly"
+
+  - id: "remote_control"
+    name: "Remote Control"
+    risk_level: "safe"
+    typical_tools:
+      - "Phillips #00 screwdriver"
+      - "Plastic opening tool"
+      - "Isopropyl alcohol"
+      - "Cotton swabs"
+    common_issues:
+      - "buttons_not_working"
+      - "ir_led_failed"
+      - "battery_contacts_corroded"
+      - "case_cracked"
+    components:
+      - "screws"
+      - "clips"
+      - "rubber_keypad"
+      - "pcb"
+      - "ir_led"
+      - "battery_contacts"
+
+  - id: "table_fan"
+    name: "Table Fan"
+    risk_level: "caution"
+    typical_tools:
+      - "Phillips #1 screwdriver"
+      - "Adjustable wrench"
+      - "Lubricant"
+      - "Multimeter"
+    common_issues:
+      - "wont_spin"
+      - "noisy_operation"
+      - "speed_settings_broken"
+      - "oscillation_failed"
+    components:
+      - "screws"
+      - "clips"
+      - "motor"
+      - "capacitor"
+      - "speed_switch"
+      - "oscillation_gear"
+      - "blades"
+    safety_notes:
+      - "Unplug and wait 5 minutes for capacitor discharge"
+      - "Do not operate with cover removed"
+
+  - id: "keyboard"
+    name: "Mechanical Keyboard"
+    risk_level: "safe"
+    typical_tools:
+      - "Keycap puller"
+      - "Switch puller"
+      - "Phillips #00 screwdriver"
+      - "Soldering iron (for non-hotswap)"
+    common_issues:
+      - "key_not_registering"
+      - "double_typing"
+      - "stabilizer_rattle"
+      - "usb_port_loose"
+    components:
+      - "keycaps"
+      - "switches"
+      - "stabilizers"
+      - "pcb"
+      - "case_screws"
+      - "usb_connector"
+      - "plate"

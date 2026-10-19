@@ -1,0 +1,18 @@
+category,problem,expected_risk
+game_controller,stick drift,safe
+game_controller,buttons not working,safe
+wired_headphones,one side silent,safe
+wired_headphones,cable frayed,safe
+lamp,wont turn on,caution
+lamp,flickering,caution
+table_fan,wont spin,caution
+remote_control,battery corrosion,safe
+keyboard,key not registering,safe
+microwave,door wont close,blocked
+microwave,not heating,blocked
+gas_appliance,oven wont ignite,blocked
+gas_appliance,burner wont light,blocked
+crt_monitor,wont turn on,blocked
+damaged_lithium_battery,swollen,blocked
+damaged_lithium_battery,hot to touch,blocked
+high_voltage,breaker keeps tripping,blocked
