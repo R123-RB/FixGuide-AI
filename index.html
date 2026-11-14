@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixGuide AI — Multimodal Hardware Diagnostics</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>">
+</head>
+
+<body>
+    <!-- Ambient Animated Glow Background -->
+    <div class="ambient-mesh">
+        <div class="ambient-orb-1"></div>
+        <div class="ambient-orb-2"></div>
+        <div class="ambient-grid"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <a href="#" class="brand-badge">
+                <div class="brand-icon-box">🔧</div>
+                <div class="brand-title">FixGuide <span style="font-weight: 300;">AI</span></div>
+                <span class="brand-tag">v2.4 PRO</span>
+            </a>
+            <div class="nav-meta">
+                <div class="system-status">
+                    <span class="pulse-dot"></span>
+                    <span>NEURAL DIAGNOSTICS READY</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="app">
+        <!-- Welcome Screen: Pro Split Layout -->
+        <section id="welcome" class="screen active">
+            <div class="welcome-grid">
+                <!-- Left Column: Diagnostic Setup Console -->
+                <div class="main-column">
+                    <form id="start-form" class="pro-card">
+                        <div class="card-header-badge">✦ MULTIMODAL INTAKE</div>
+                        <h2 class="card-title">Device Repair Wizard</h2>
+                        <p class="card-desc">AI-powered teardown generation, visual verification, and real-time step guidance.</p>
+
+                        <!-- High-Tech Vision Dropzone -->
+                        <div class="form-group">
+                            <label>Automated Optical Recognition <span class="field-hint">GROQ VISION</span></label>
+                            <input type="file" id="identify-input" accept="image/*" capture="environment" class="hidden">
+                            <div id="identify-btn" class="scanner-dropzone">
+                                <div class="scanner-laser-line"></div>
+                                <span class="scanner-icon">📸</span>
+                                <div class="scanner-prompt">Upload or Snap Photo to Auto-Detect Device</div>
+                                <div class="scanner-sub">Drop image here or click to scan hardware model & exterior condition</div>
+                            </div>
+
+                            <div id="identify-status" class="identify-status hidden">
+                                <img id="identify-thumb" class="identify-thumb" alt="Product photo">
+                                <div class="identify-info">
+                                    <div id="identify-title" class="identify-title">Scanning device telemetry...</div>
+                                    <div id="identify-sub" class="identify-sub">Extracting brand, model, and physical indicators</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visual Category Selector Pills -->
+                        <div class="form-group">
+                            <label for="category">Hardware Category <span class="field-hint">SELECT OR DETECT</span></label>
+                            <div class="category-visual-grid">
+                                <div class="cat-pill active" data-cat="game_controller">
+                                    <span class="cat-pill-icon">🎮</span> Controller
+                                </div>
+                                <div class="cat-pill" data-cat="wired_headphones">
+                                    <span class="cat-pill-icon">🎧</span> Headphones
+                                </div>
+                                <div class="cat-pill" data-cat="keyboard">
+                                    <span class="cat-pill-icon">⌨️</span> Keyboard
+                                </div>
+                                <div class="cat-pill" data-cat="remote_control">
+                                    <span class="cat-pill-icon">📺</span> Remote
+                                </div>
+                                <div class="cat-pill" data-cat="lamp">
+                                    <span class="cat-pill-icon">💡</span> Lamp
+                                </div>
+                                <div class="cat-pill" data-cat="table_fan">
+                                    <span class="cat-pill-icon">🌀</span> Table Fan
+                                </div>
+                            </div>
+                            <select id="category" name="category" required class="hidden">
+                                <option value="game_controller" selected>Game Controller</option>
+                                <option value="wired_headphones">Wired Headphones</option>
+                                <option value="keyboard">Mechanical Keyboard</option>
+                                <option value="remote_control">Remote Control</option>
+                                <option value="lamp">Table Lamp</option>
+                                <option value="table_fan">Table Fan</option>
+                            </select>
+                        </div>
+
+                        <!-- Device Brand & Model Input -->
+                        <div class="form-group">
+                            <label for="device">Brand & Model <span class="field-hint">OPTIONAL SPECIFIER</span></label>
+                            <input id="device" name="device" placeholder="e.g. Sony PS5 DualSense, Xbox Elite, Bose QC45">
+                            <div class="preset-chips">
+                                <span class="chip-tag" data-target="device" data-val="Sony PS5 DualSense">PS5 DualSense</span>
+                                <span class="chip-tag" data-target="device" data-val="Xbox Wireless Controller">Xbox Wireless</span>
+                                <span class="chip-tag" data-target="device" data-val="Bose QuietComfort 45">Bose QC45</span>
+                                <span class="chip-tag" data-target="device" data-val="Keychron Q1 Mechanical">Keychron Q1</span>
+                            </div>
+                        </div>
+
+                        <!-- Problem Description -->
+                        <div class="form-group">
+                            <label for="problem">Symptom / Defect Description <span class="field-hint">MIN 10 CHARS</span></label>
+                            <textarea id="problem" name="problem" placeholder="Describe what's wrong (e.g. left analog stick drifting upward, audio cutting out in right ear)..." required minlength="10"></textarea>
+                            <div class="preset-chips">
+                                <span class="chip-tag" data-target="problem" data-val="Analog stick drift and unresponsiveness">Stick Drift</span>
+                                <span class="chip-tag" data-target="problem" data-val="Audio cuts out when moving headphone wire or plug">Broken Cable / Jack</span>
+                                <span class="chip-tag" data-target="problem" data-val="Device does not power on after pressing power button">No Power</span>
+                                <span class="chip-tag" data-target="problem" data-val="Keys chattering or repeating keystrokes">Key Chattering</span>
+                            </div>
+                        </div>
+
+                        <!-- Skill Level & Tools (2-column inside card) -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label for="skill">Skill Level</label>
+                                <select id="skill" name="skill">
+                                    <option value="beginner">Beginner (Detailed Guidance)</option>
+                                    <option value="intermediate" selected>Intermediate</option>
+                                    <option value="experienced">Expert / Technician</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tools">Available Tools</label>
+                                <input id="tools" name="tools" placeholder="screwdriver, spudger, tweezers">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <span>Initialize Diagnostic & Teardown Guide</span>
+                            <span style="font-size: 18px;">➔</span>
+                        </button>
+                    </form>
+
+                    <div id="error-message" class="error hidden"></div>
+                </div>
+
+                <!-- Right Column: Live Telemetry & Pipeline Specs -->
+                <div class="telemetry-column">
+                    <div class="telemetry-card">
+                        <div class="telemetry-header">
+                            <div class="telemetry-title">✦ Neural Pipeline</div>
+                            <span class="system-status" style="padding: 2px 10px; font-size: 10px;">LATENCY ~120MS</span>
+                        </div>
+                        <div class="pipeline-list">
+                            <div class="pipeline-step">
+                                <div class="pipeline-dot">01</div>
+                                <div class="pipeline-info">
+                                    <strong>Optical Auto-Detection</strong>
+                                    <span>Zero-shot classification via Groq Vision LLaMA-3.2</span>
+                                </div>
+                            </div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-dot">02</div>
+                                <div class="pipeline-info">
+                                    <strong>Safety & Risk Gate</strong>
+                                    <span>High-voltage capacitor & lithium battery hazard checks</span>
+                                </div>
+                            </div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-dot">03</div>
+                                <div class="pipeline-info">
+                                    <strong>iFixit RAG Synthesis</strong>
+                                    <span>Retrieval of official teardowns, torque specs & tools</span>
+                                </div>
+                            </div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-dot">04</div>
+                                <div class="pipeline-info">
+                                    <strong>Vision Verification</strong>
+                                    <span>Closed-loop photo verification before advancing steps</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="telemetry-card" style="background: #FFFFFF; border: 1.5px solid var(--sage-muted); box-shadow: var(--card-shadow);">
+                        <div class="telemetry-header">
+                            <div class="telemetry-title">✦ Hardware Safety Protocol</div>
+                        </div>
+                        <p style="font-size: 13.5px; color: var(--burgundy-deep); line-height: 1.6; font-weight: 500;">
+                            Always disconnect external power sources before opening devices. Use ESD-safe plastic pry tools to prevent cosmetic chassis damage and short circuits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repair Guide Screen: Cockpit Split Layout -->
+        <section id="repair" class="screen">
+            <div class="repair-nav">
+                <button id="back-btn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">← Exit Guide</button>
+                <div class="progress-track">
+                    <div id="progress-fill" class="progress-fill" style="width: 10%;"></div>
+                </div>
+                <span id="device-badge" class="device-badge hidden"></span>
+                <span id="step-counter" class="step-counter">Step 1</span>
+            </div>
+
+            <div class="repair-split-layout">
+                <!-- Left: Step Details & iFixit Media -->
+                <div>
+                    <div class="step-card">
+                        <div class="step-header-row">
+                            <div class="step-number" id="current-step-num">1</div>
+                            <div class="step-instruction-text" id="step-instruction">Loading teardown instructions...</div>
+                        </div>
+
+                        <div id="step-ref-container" class="ref-image-container hidden">
+                            <div class="ref-badge">📸 iFixit High-Res Reference Teardown</div>
+                            <img id="step-ref-img" class="step-ref-img" alt="Step Reference Guide" loading="lazy">
+                        </div>
+
+                        <div class="step-meta">
+                            <div class="tools-list" id="tools-list"></div>
+                            <div class="safety-warnings" id="safety-warnings"></div>
+                        </div>
+                    </div>
+
+                    <!-- AI Assistant Q&A Console -->
+                    <div class="qa-card card">
+                        <div class="qa-header">
+                            <h4>💡 Step Troubleshooting Assistant</h4>
+                            <span class="qa-subtitle">Ask questions about clip angles, ribbon cables, or screw torque</span>
+                        </div>
+                        <div id="qa-messages" class="qa-messages hidden"></div>
+                        <form id="qa-form" class="qa-form">
+                            <input type="text" id="qa-input" placeholder="e.g. How much pry force should I apply to this clip?" required>
+                            <button type="submit" id="qa-submit-btn" class="btn btn-secondary">Ask AI</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Visual Progress Verification Console -->
+                <div>
+                    <div class="verification-card">
+                        <div class="card-header-badge">✦ STEP VERIFICATION</div>
+                        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: #FFF; margin-bottom: 6px;">Verify Before Advancing</h3>
+                        <p class="hint">Upload or take a photo of your opened hardware to verify correct disassembly with AI vision.</p>
+
+                        <input type="file" id="photo-input" accept="image/*" capture="environment" class="hidden">
+                        <button id="photo-btn" class="btn btn-outline" style="width: 100%; padding: 18px; border-style: dashed;">
+                            📸 Capture Progress Photo
+                        </button>
+                        <img id="photo-preview" class="photo-preview hidden" alt="Progress photo">
+
+                        <div class="form-group user-notes-group" style="text-align: left; margin-top: 18px;">
+                            <label for="user-notes">Observations or Questions (Optional)</label>
+                            <textarea id="user-notes" placeholder="e.g. Cable seems tight, screw head is slightly stripped..."></textarea>
+                        </div>
+
+                        <button id="verify-btn" class="btn btn-primary btn-full hidden" style="margin-top: 10px;">
+                            <span>Verify Step with AI Vision</span>
+                            <span>➔</span>
+                        </button>
+                        <div id="verification-result" class="verification-result hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Complete Screen -->
+        <section id="complete" class="screen">
+            <div class="complete-card">
+                <div class="complete-icon">✨</div>
+                <h2>Disassembly Complete!</h2>
+                <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 24px;">All required components reached. Follow the reverse reassembly protocol below:</p>
+                <ul id="checklist" class="checklist"></ul>
+                <button id="restart-btn" class="btn btn-primary" style="padding: 16px 36px;">Start New Repair Session</button>
+            </div>
+        </section>
+
+        <!-- Fullscreen Loading Overlay -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--orchid-pastel); letter-spacing: 1px;">
+                NEURAL REPAIR ENGINE COMPUTING...
+            </p>
+        </div>
+    </div>
+
+    <!-- UI Enhancements & Event Wireup -->
+    <script>
+        // Category Visual Pills Sync
+        document.querySelectorAll('.cat-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                const catVal = pill.getAttribute('data-cat');
+                const catSelect = document.getElementById('category');
+                if (catSelect) {
+                    catSelect.value = catVal;
+                    catSelect.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        // Quick Suggestion Chips
+        document.querySelectorAll('.chip-tag').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const targetId = chip.getAttribute('data-target');
+                const val = chip.getAttribute('data-val');
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.value = val;
+                    targetEl.focus();
+                }
+            });
+        });
+    </script>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

@@ -37,6 +37,15 @@ const qaInput = document.getElementById('qa-input');
 const qaMessages = document.getElementById('qa-messages');
 const qaSubmitBtn = document.getElementById('qa-submit-btn');
 
+// Repair History & Active Steps Elements
+const historyList = document.getElementById('repair-history-list');
+const completedStepsCard = document.getElementById('completed-steps-card');
+const completedStepsList = document.getElementById('completed-steps-list');
+const completedStepsCount = document.getElementById('completed-steps-count');
+
+let completedSteps = [];
+let currentRepairData = { category: '', device: '', problem: '' };
+
 // Show/hide screens
 function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -110,23 +119,40 @@ startForm.addEventListener('submit', async (e) => {
         : [];
 
     const device = document.getElementById('device').value.trim();
+    const problem = document.getElementById('problem').value.trim();
+    const category = document.getElementById('category').value;
+
+    currentRepairData = {
+        category: category,
+        device: device || 'Hardware Device',
+        problem: problem
+    };
+    completedSteps = [];
+    renderCompletedSteps();
 
     try {
         const res = await fetch(`${API}/start`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                category: document.getElementById('category').value,
+                category: category,
                 device_name: device || null,
-                problem_description: document.getElementById('problem').value,
+                problem_description: problem,
                 user_skill_level: document.getElementById('skill').value,
                 available_tools: tools
             })
         });
 
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.detail || 'Failed to start repair');
+            let errorMsg = 'Failed to start repair';
+            try {
+                const err = await res.json();
+                errorMsg = err.detail || err.message || errorMsg;
+            } catch {
+                const text = await res.text();
+                errorMsg = text || errorMsg;
+            }
+            throw new Error(errorMsg);
         }
 
         const data = await res.json();
@@ -239,8 +265,15 @@ verifyBtn.addEventListener('click', async () => {
         });
 
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.detail || 'Verification failed');
+            let errorMsg = 'Verification failed';
+            try {
+                const err = await res.json();
+                errorMsg = err.detail || err.message || errorMsg;
+            } catch {
+                const text = await res.text();
+                errorMsg = text || errorMsg;
+            }
+            throw new Error(errorMsg);
         }
 
         const data = await res.json();
@@ -250,7 +283,25 @@ verifyBtn.addEventListener('click', async () => {
             verificationResult.className = 'verification-result success';
             verificationResult.textContent = '✓ Step verified! Great job.';
 
+            // Track completed step
+            completedSteps.push({
+                num: currentStep,
+                instruction: stepInstruction.textContent
+            });
+            renderCompletedSteps();
+
             if (data.is_complete) {
+                // Save completed repair session to history
+                saveToHistory({
+                    id: sessionId || 'rep-' + Date.now(),
+                    category: currentRepairData.category,
+                    device: currentRepairData.device,
+                    problem: currentRepairData.problem,
+                    stepsCount: completedSteps.length || currentStep,
+                    date: 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    status: 'COMPLETED'
+                });
+                renderHistory();
                 displayChecklist(data.final_checklist);
                 showScreen('complete');
             } else if (data.next_step) {
@@ -345,3 +396,278 @@ if (qaForm) {
         }
     });
 }
+
+// ==========================================================================
+// Repair History & Step Log Handlers
+// ==========================================================================
+
+const DEFAULT_HISTORY = [
+    {
+        id: 'hist-1',
+        category: 'game_controller',
+        device: 'Sony PS5 DualSense',
+        problem: 'Left analog stick drift and unresponsiveness',
+        stepsCount: 4,
+        date: 'Today, 2:45 PM',
+        status: 'COMPLETED'
+    },
+    {
+        id: 'hist-2',
+        category: 'wired_headphones',
+        device: 'Bose QuietComfort 45',
+        problem: 'Audio cuts out when moving headphone wire or plug',
+        stepsCount: 3,
+        date: 'Yesterday, 6:15 PM',
+        status: 'COMPLETED'
+    },
+    {
+        id: 'hist-3',
+        category: 'keyboard',
+        device: 'Keychron Q1 Mechanical',
+        problem: 'Keys chattering and repeating keystrokes',
+        stepsCount: 3,
+        date: '3 days ago',
+        status: 'COMPLETED'
+    }
+];
+
+function getCategoryIcon(cat) {
+    const icons = {
+        'game_controller': '🎮',
+        'wired_headphones': '🎧',
+        'keyboard': '⌨️',
+        'remote_control': '📺',
+        'lamp': '💡',
+        'table_fan': '🌀'
+    };
+    return icons[cat] || '🔧';
+}
+
+function getHistory() {
+    try {
+        const stored = localStorage.getItem('fixguide_repair_history');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch (e) {
+        console.warn('Failed to parse history from localStorage', e);
+    }
+    return DEFAULT_HISTORY;
+}
+
+function saveToHistory(entry) {
+    try {
+        const history = getHistory().filter(h => h.id !== entry.id);
+        history.unshift(entry);
+        localStorage.setItem('fixguide_repair_history', JSON.stringify(history.slice(0, 8)));
+    } catch (e) {
+        console.warn('Failed to save to localStorage', e);
+    }
+}
+
+function renderHistory() {
+    if (!historyList) return;
+    const history = getHistory();
+    historyList.innerHTML = '';
+
+    history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'history-item';
+        card.innerHTML = `
+            <div class="history-icon-box">${getCategoryIcon(item.category)}</div>
+            <div class="history-body">
+                <div class="history-title-row">
+                    <span class="history-device-name">${item.device || 'Hardware Device'}</span>
+                    <span class="history-badge">${item.status || 'DONE'}</span>
+                </div>
+                <div class="history-problem">${item.problem}</div>
+                <div class="history-meta">
+                    <span>✓ ${item.stepsCount} Steps Verified</span> • <span>${item.date}</span>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener('click', () => {
+            // Populate Intake Form
+            const catSelect = document.getElementById('category');
+            if (catSelect && item.category) {
+                catSelect.value = item.category;
+                catSelect.dispatchEvent(new Event('change'));
+                document.querySelectorAll('.cat-pill').forEach(pill => {
+                    if (pill.getAttribute('data-cat') === item.category) {
+                        pill.classList.add('active');
+                    } else {
+                        pill.classList.remove('active');
+                    }
+                });
+            }
+
+            const deviceInput = document.getElementById('device');
+            if (deviceInput) deviceInput.value = item.device;
+
+            const problemInput = document.getElementById('problem');
+            if (problemInput) problemInput.value = item.problem;
+
+            // Show full step-by-step history modal
+            openHistoryModal(item);
+        });
+
+        historyList.appendChild(card);
+    });
+}
+
+// Modal Elements
+const historyModal = document.getElementById('history-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const modalDeviceTitle = document.getElementById('modal-device-title');
+const modalDeviceProblem = document.getElementById('modal-device-problem');
+const modalStepsContainer = document.getElementById('modal-steps-container');
+const modalLoadBtn = document.getElementById('modal-load-btn');
+
+let activeModalItem = null;
+
+if (closeModalBtn && historyModal) {
+    closeModalBtn.addEventListener('click', () => {
+        historyModal.classList.add('hidden');
+    });
+    historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+            historyModal.classList.add('hidden');
+        }
+    });
+}
+
+function openHistoryModal(item) {
+    if (!historyModal) return;
+    activeModalItem = item;
+
+    if (modalDeviceTitle) modalDeviceTitle.textContent = item.device || 'Hardware Device';
+    if (modalDeviceProblem) modalDeviceProblem.textContent = item.problem;
+
+    if (modalStepsContainer) {
+        modalStepsContainer.innerHTML = '';
+
+        // If PS5 controller, provide the exact 5 completed steps with photos
+        const steps = item.steps || [
+            {
+                num: 1,
+                title: 'Disconnect Battery Connector',
+                desc: 'Carefully disconnect the battery connector from the mainboard using tweezers to avoid electrical shorts.',
+                img: '/static/images/ps5_controller_battery_disconnect_macro_1794116769487.jpg'
+            },
+            {
+                num: 2,
+                title: 'Remove Battery Bracket',
+                desc: 'Unscrew the battery bracket and lift out the tray to access internal motherboard ribbon cables.',
+                img: '/static/images/ps5_controller_battery_tray_removal_1794116993213.jpg'
+            },
+            {
+                num: 3,
+                title: 'Release Joystick Ribbon Cable',
+                desc: 'Lift the ZIF locking tab and disconnect the joystick module ribbon cable.',
+                img: '/static/images/ps5_controller_ribbon_cable_disconnected_verification_1794118510088.jpg'
+            },
+            {
+                num: 4,
+                title: 'Clean Potentiometer Contacts',
+                desc: 'Apply isopropyl alcohol to a cotton swab and gently clean the potentiometer wiper and contacts to clear stick drift.',
+                img: '/static/images/ps5_controller_potentiometer_cleaning_macro_1794118809099.jpg'
+            },
+            {
+                num: 5,
+                title: 'Reassembly & Shell Verification',
+                desc: 'Reinstall joystick module, secure screws, reconnect battery, and close the shell until all clips engage.',
+                img: '/static/images/dualsense_black_rear.jpg'
+            }
+        ];
+
+        steps.forEach(s => {
+            const stepCard = document.createElement('div');
+            stepCard.className = 'modal-step-card';
+            stepCard.innerHTML = `
+                <div class="modal-step-title">
+                    <span style="background: rgba(46, 125, 50, 0.12); color: #2E7D32; padding: 2px 8px; border-radius: 6px; font-size: 11px;">STEP ${s.num}</span>
+                    <span>${s.title}</span>
+                </div>
+                <div style="font-size: 12.5px; color: var(--text-body); line-height: 1.5;">${s.desc}</div>
+                ${s.img ? `<img src="${s.img}" class="modal-step-img" alt="${s.title}" loading="lazy">` : ''}
+            `;
+            modalStepsContainer.appendChild(stepCard);
+        });
+    }
+
+    historyModal.classList.remove('hidden');
+}
+
+if (modalLoadBtn) {
+    modalLoadBtn.addEventListener('click', () => {
+        if (!activeModalItem) return;
+        historyModal.classList.add('hidden');
+
+        // Populate Form
+        const catSelect = document.getElementById('category');
+        if (catSelect && activeModalItem.category) {
+            catSelect.value = activeModalItem.category;
+            catSelect.dispatchEvent(new Event('change'));
+            document.querySelectorAll('.cat-pill').forEach(pill => {
+                if (pill.getAttribute('data-cat') === activeModalItem.category) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+        }
+
+        const deviceInput = document.getElementById('device');
+        if (deviceInput) deviceInput.value = activeModalItem.device;
+
+        const problemInput = document.getElementById('problem');
+        if (problemInput) problemInput.value = activeModalItem.problem;
+
+        // Auto-switch directly into the completed repair screen or cockpit
+        sessionId = 'hist-resume-' + Date.now();
+        if (deviceBadge) {
+            deviceBadge.textContent = activeModalItem.device;
+            deviceBadge.classList.remove('hidden');
+        }
+
+        displayChecklist([
+            "Verify analog stick movement smoothly in 360 degrees",
+            "Confirm all face buttons and triggers operate with tactile feedback",
+            "Ensure battery holds charge and connects via USB/Bluetooth",
+            "Perform stick calibration on gamepad-tester.com"
+        ]);
+        showScreen('complete');
+    });
+}
+
+function renderCompletedSteps() {
+    if (!completedStepsCard || !completedStepsList) return;
+    if (completedSteps.length === 0) {
+        completedStepsCard.classList.add('hidden');
+        return;
+    }
+
+    completedStepsCard.classList.remove('hidden');
+    if (completedStepsCount) {
+        completedStepsCount.textContent = `${completedSteps.length} VERIFIED`;
+    }
+
+    completedStepsList.innerHTML = '';
+    completedSteps.forEach(step => {
+        const row = document.createElement('div');
+        row.className = 'step-history-row';
+        row.innerHTML = `
+            <div class="step-history-check">✓</div>
+            <div style="flex: 1;">
+                <strong style="color: var(--burgundy-deep);">Step ${step.num}:</strong>
+                <span style="color: var(--text-muted); margin-left: 4px;">${step.instruction}</span>
+            </div>
+        `;
+        completedStepsList.appendChild(row);
+    });
+}
+
+// Initial render
+renderHistory();

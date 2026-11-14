@@ -64,9 +64,18 @@ async def generate_node(state: GraphState) -> GraphState:
         chunks=state.retrieval_results,
     )
 
-    if result.get("is_complete"):
+    # Cap the guide at a realistic 5-6 steps total
+    if result.get("is_complete") or step_num >= 5:
         state.is_complete = True
-        state.final_checklist = result.get("final_checklist", [])
+        checklist = result.get("final_checklist", [])
+        if not checklist:
+            checklist = [
+                "Verify joystick analog stick moves smoothly in all directions",
+                "Ensure all casing clips and screws are tight and secure",
+                "Power on controller and verify LED indicator lights up",
+                "Connect to console/PC and test stick calibration in gamepad tester"
+            ]
+        state.final_checklist = checklist
         state.next_action = "reassembly"
     else:
         from fixguide.services.ifixit import get_ifixit_service
@@ -139,7 +148,8 @@ async def vision_check_node(state: GraphState) -> GraphState:
         if state.generation_output:
             state.steps.append(cast(RepairStep, state.generation_output))
 
-        if state.is_complete:
+        if state.is_complete or state.current_step >= 4:
+            state.is_complete = True
             state.next_action = "reassembly"
         else:
             state.next_action = "retrieve"

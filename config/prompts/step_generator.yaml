@@ -32,4 +32,6 @@ user: |
   {% endfor %}
 
   Generate the NEXT repair step. If this is the first step, start with opening/access.
-  If all steps done, return {"is_complete": true, "final_checklist": [...]}.
+  IMPORTANT: A standard repair must finish in 4 to 6 steps maximum.
+  If current_step >= 5, or if the core repair/cleaning and reassembly are underway, you MUST return:
+  {"is_complete": true, "final_checklist": ["Check analog stick movement in all directions", "Verify all case screws and clips are secure", "Power on and test Bluetooth/USB connection", "Calibrate joystick in gamepad tester"]}
