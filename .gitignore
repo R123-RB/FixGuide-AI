@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Project
+.env
+*.log
+logs/
+data/processed/
+data/raw/
+models/
+*.npy
+*.faiss
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Build
+dist/
+build/
+*.egg-info/

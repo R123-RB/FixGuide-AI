@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixGuide AI - Repair Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Welcome Screen -->
+        <section id="welcome" class="screen active">
+            <div class="logo">
+                <span class="logo-icon">🔧</span>
+                <h1>FixGuide AI</h1>
+                <p class="subtitle">Multimodal AI Repair Assistant</p>
+            </div>
+
+            <form id="start-form" class="card">
+                <div class="form-group identify-box">
+                    <input type="file" id="identify-input" accept="image/*" capture="environment" class="hidden">
+                    <button type="button" id="identify-btn" class="btn btn-outline btn-full">
+                        📷 Upload Photo to Auto-Detect Product
+                    </button>
+                    <div id="identify-status" class="identify-status hidden">
+                        <img id="identify-thumb" class="identify-thumb" alt="Product photo">
+                        <div class="identify-info">
+                            <div id="identify-title" class="identify-title">Analyzing device...</div>
+                            <div id="identify-sub" class="identify-sub"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Product Category</label>
+                    <select id="category" name="category" required>
+                        <option value="game_controller">Game Controller</option>
+                        <option value="wired_headphones">Wired Headphones</option>
+                        <option value="lamp">Table Lamp</option>
+                        <option value="remote_control">Remote Control</option>
+                        <option value="table_fan">Table Fan</option>
+                        <option value="keyboard">Mechanical Keyboard</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="device">Device Brand & Model (Optional)</label>
+                    <input id="device" name="device"
+                        placeholder="e.g. Sony PS5 DualSense, Xbox Wireless, Logitech G Pro">
+                </div>
+
+                <div class="form-group">
+                    <label for="problem">What's wrong?</label>
+                    <textarea id="problem" name="problem" placeholder="Describe the problem..." required
+                        minlength="10"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="skill">Skill Level</label>
+                    <select id="skill" name="skill">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="experienced">Experienced</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tools">Available Tools (comma-separated)</label>
+                    <input id="tools" name="tools" placeholder="e.g. screwdriver, tweezers">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Start Repair Guide</button>
+            </form>
+
+            <div id="error-message" class="error hidden"></div>
+        </section>
+
+        <!-- Repair Guide Screen -->
+        <section id="repair" class="screen">
+            <div class="repair-header">
+                <button id="back-btn" class="btn btn-secondary">← Back</button>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <span id="device-badge" class="device-badge hidden"></span>
+                <span id="step-counter" class="step-counter">Step 0</span>
+            </div>
+
+            <div class="repair-content">
+                <div class="step-card">
+                    <div class="step-number" id="current-step-num">0</div>
+                    <div class="step-content">
+                        <h3 id="step-instruction">Loading...</h3>
+                        <div id="step-ref-container" class="ref-image-container hidden">
+                            <div class="ref-badge">📸 Reference from iFixit Guide</div>
+                            <img id="step-ref-img" class="step-ref-img" alt="Step Reference Guide" loading="lazy">
+                        </div>
+                        <div class="step-meta">
+                            <div class="tools-list" id="tools-list"></div>
+                            <div class="safety-warnings" id="safety-warnings"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step Assistant Q&A -->
+                <div class="qa-card card">
+                    <div class="qa-header">
+                        <h4>💡 Questions About This Step?</h4>
+                        <span class="qa-subtitle">Ask the AI assistant if you're stuck, unsure about a part or screw, or
+                            need real-time troubleshooting</span>
+                    </div>
+                    <div id="qa-messages" class="qa-messages hidden"></div>
+                    <form id="qa-form" class="qa-form">
+                        <input type="text" id="qa-input"
+                            placeholder="e.g. How much force should I apply to the clip? Which direction to pry?"
+                            required>
+                        <button type="submit" id="qa-submit-btn" class="btn btn-secondary">Ask Assistant</button>
+                    </form>
+                </div>
+
+                <div class="verification-card">
+                    <h4>Verify Your Progress</h4>
+                    <p class="hint">Take a photo showing your current progress</p>
+                    <input type="file" id="photo-input" accept="image/*" capture="environment" class="hidden">
+                    <button id="photo-btn" class="btn btn-outline">📸 Take Photo</button>
+                    <img id="photo-preview" class="photo-preview hidden" alt="Progress photo">
+                    <div class="form-group user-notes-group" style="text-align: left; margin-top: 15px;">
+                        <label for="user-notes">Notes or observations (optional):</label>
+                        <textarea id="user-notes"
+                            placeholder="Describe what you see or any questions/issues encountered (e.g. 'Removed battery cover, but battery is glued')..."></textarea>
+                    </div>
+                    <button id="verify-btn" class="btn btn-primary hidden">Verify & Continue</button>
+                    <div id="verification-result" class="verification-result"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Complete Screen -->
+        <section id="complete" class="screen">
+            <div class="complete-card">
+                <div class="complete-icon">✅</div>
+                <h2>Repair Complete!</h2>
+                <p>Follow the reassembly checklist:</p>
+                <ul id="checklist" class="checklist"></ul>
+                <button id="restart-btn" class="btn btn-primary">Start New Repair</button>
+            </div>
+        </section>
+
+        <!-- Loading -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+system: |
+  You are a product identification expert. Analyze the uploaded image and identify the consumer product.
+
+  Return ONLY a valid JSON object with these exact fields:
+  - category: one of [game_controller, wired_headphones, lamp, remote_control, table_fan, keyboard]
+  - brand: string or null
+  - model: string or null
+  - confidence: float between 0 and 1
+  - reasoning: brief explanation
+
+  Do not include any text outside the JSON object.
+
+user: |
+  Identify the product in this image. Focus on:
+  1. Overall form factor and category
+  2. Visible branding/logos
+  3. Model identifiers (model numbers, FCC IDs, etc.)
+  4. Distinctive features (button layout, port types, shape)
+
+  If uncertain, return the most likely category with lower confidence.

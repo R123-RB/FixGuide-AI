@@ -1,0 +1,84 @@
+app:
+  name: "fixguide-ai"
+  version: "0.1.0"
+  env: "development"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  cors_origins: ["http://localhost:3000", "http://localhost:5173"]
+
+llm:
+  provider: "gemini"
+  model: "gemini-1.5-flash"
+  temperature: 0.1
+  max_tokens: 4096
+  timeout: 60
+  max_retries: 3
+
+vision:
+  provider: "gemini"
+  model: "gemini-1.5-flash"
+  max_tokens: 2048
+
+embeddings:
+  model: "sentence-transformers/all-mpnet-base-v2"
+  device: "cpu"
+  batch_size: 32
+
+vector_store:
+  provider: "qdrant"
+  qdrant:
+    host: "localhost"
+    port: 6333
+    collection: "fixguide_repair_chunks"
+    vector_size: 768
+    distance: "Cosine"
+
+retrieval:
+  top_k: 10
+  bm25_weight: 0.3
+  dense_weight: 0.7
+  rerank: true
+  rerank_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
+ingest:
+  chunk_size: 512
+  chunk_overlap: 64
+  embedding_model: "sentence-transformers/all-mpnet-base-v2"
+  qdrant_collection: "fixguide_repair_chunks"
+  bm25_corpus_path: "data/processed/bm25_corpus.jsonl"
+  ifixit_api_key: "${IFIXIT_API_KEY}"
+
+risk_gate:
+  blocked_categories:
+    - "microwave"
+    - "gas_appliance"
+    - "high_voltage"
+    - "crt_monitor"
+    - "damaged_lithium_battery"
+  caution_keywords:
+    - "spring"
+    - "sharp_edge"
+    - "capacitor"
+    - "high_temperature"
+
+product_id:
+  confidence_threshold: 0.75
+  model_path: "models/product_classifier"
+
+generation:
+  max_steps: 20
+  groundedness_threshold: 0.8
+  require_citations: true
+
+verification:
+  vision_model: "gpt-4o"
+  similarity_threshold: 0.7
+  max_retries: 2
+
+logging:
+  level: "INFO"
+  format: "json"
+  file: "logs/fixguide.log"
